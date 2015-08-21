@@ -1,5 +1,6 @@
 require 'oyster_card'
 describe OysterCard do
+  let(:station){double(:station)}
   it 'has a balance of zero' do
     expect(subject.balance).to eq(0)
   end
@@ -14,7 +15,7 @@ describe OysterCard do
   end
 
   it "won't let you touch in if you don't have enough balance" do
-    expect{subject.touch_in}.to raise_error("You don't have enough.")
+    expect{subject.touch_in(station)}.to raise_error("You don't have enough.")
   end
 
   context 'it has a full balance' do
@@ -33,12 +34,17 @@ describe OysterCard do
     end
 
     it "knows if it's in a journey" do
-      subject.touch_in
+      subject.touch_in(station)
       expect(subject).to be_in_journey
     end
 
+    it "knows what station in touched in at" do
+      subject.touch_in(station)
+      expect(subject.entry_station).to eq(station)
+    end
+
     context 'when touched in' do
-      before{subject.touch_in}
+      before{subject.touch_in(station)}
 
       it "can touch out of a journey" do
         subject.touch_out
