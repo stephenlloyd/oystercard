@@ -20,24 +20,21 @@ class OysterCard
   end
 
   def in_journey?
-    @in_journey
+    !entry_station.nil?
   end
 
   def touch_in(station)
     raise "You don't have enough." if balance < MINIMUM_CHARGE
-    self.in_journey = true
     self.entry_station = station
   end
 
   def touch_out
     deduct(MINIMUM_CHARGE)
-    self.in_journey = false
+    self.entry_station = nil
   end
 
-
-
   private
-  attr_writer :in_journey, :entry_station
+  attr_writer :entry_station
 
 
 end
