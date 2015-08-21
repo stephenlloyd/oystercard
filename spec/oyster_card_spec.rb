@@ -1,6 +1,7 @@
 require 'oyster_card'
 describe OysterCard do
   let(:station){double(:station)}
+  let(:other_station){double :station}
   it 'has a balance of zero' do
     expect(subject.balance).to eq(0)
   end
@@ -53,6 +54,11 @@ describe OysterCard do
 
       it "deducts the minimum charge from the balance when touching out" do
         expect{subject.touch_out}.to change{subject.balance}.by(-OysterCard::MINIMUM_CHARGE)
+      end
+
+      it "records the journey on touch out" do
+        subject.touch_out(other_station)
+        expect(station.journies).to eq [{in_station: station, out_station: other_station}]
       end
 
     end
