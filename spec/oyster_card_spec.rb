@@ -19,6 +19,10 @@ describe OysterCard do
     expect{subject.touch_in(station)}.to raise_error("You don't have enough.")
   end
 
+  it "has an empty journey history" do
+    expect(subject.journeys).to be_empty
+  end
+
   context 'it has a full balance' do
     before{subject.top_up(OysterCard::BALANCE_LIMIT)}
 
@@ -48,17 +52,17 @@ describe OysterCard do
       before{subject.touch_in(station)}
 
       it "can touch out of a journey" do
-        subject.touch_out
+        subject.touch_out(other_station)
         expect(subject).not_to be_in_journey
       end
 
       it "deducts the minimum charge from the balance when touching out" do
-        expect{subject.touch_out}.to change{subject.balance}.by(-OysterCard::MINIMUM_CHARGE)
+        expect{subject.touch_out(other_station)}.to change{subject.balance}.by(-OysterCard::MINIMUM_CHARGE)
       end
 
       it "records the journey on touch out" do
         subject.touch_out(other_station)
-        expect(station.journies).to eq [{in_station: station, out_station: other_station}]
+        expect(subject.journeys).to eq [{entry_station: station, exit_station: other_station}]
       end
 
     end
