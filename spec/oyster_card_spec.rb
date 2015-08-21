@@ -30,7 +30,7 @@ describe OysterCard do
 
     it "knows if it's in a journey" do
       subject.touch_in
-      expect(subject).not_to be_in_journey
+      expect(subject).to be_in_journey
     end
 
     context 'when touched in' do
@@ -38,7 +38,7 @@ describe OysterCard do
 
       it "can touch out of a journey" do
         subject.touch_out
-        expect(subject).to be_in_journey
+        expect(subject).not_to be_in_journey
       end
 
     end
