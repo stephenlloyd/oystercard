@@ -24,7 +24,14 @@ describe OysterCard do
       expect{subject.deduct(5)}.to change{subject.balance}.by(-5)
     end
 
+    it "knows if it's not in a journey" do
+      expect(subject.in_journey?).to be(false)
+    end
 
+    it "knows if it's in a journey" do
+      subject.touch_in
+      expect(subject.in_journey?).to be(true)
+    end
 
   end
 end
