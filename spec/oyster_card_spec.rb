@@ -13,11 +13,15 @@ describe OysterCard do
     expect{subject.deduct(1)}.to raise_error("You don't have enough.")
   end
 
-  context 'it has a 90 balance' do
-    before{subject.top_up(90)}
+  it "won't let you touch in if you don't have enough balance" do
+    expect{subject.touch_in}.to raise_error("You don't have enough.")
+  end
 
-    it "won't let you top up over 90" do
-      expect{subject.top_up(1)}.to raise_error("You have exceeded your 90 allowance.")
+  context 'it has a full balance' do
+    before{subject.top_up(OysterCard::BALANCE_LIMIT)}
+
+    it "won't let you top up over the balance limit" do
+      expect{subject.top_up(1)}.to raise_error("You have exceeded your #{OysterCard::BALANCE_LIMIT} allowance.")
     end
 
     it "can deduct an amout" do
