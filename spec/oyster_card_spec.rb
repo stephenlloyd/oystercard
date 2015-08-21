@@ -33,5 +33,15 @@ describe OysterCard do
       expect(subject.in_journey?).to be(true)
     end
 
+    context 'when touched in' do
+      before{subject.touch_in}
+
+      it "can touch out of a journey" do
+        subject.touch_out
+        expect(subject.in_journey?).to be(false)
+      end
+
+    end
+
   end
 end
