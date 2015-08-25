@@ -6,17 +6,36 @@ class OysterCard
 
   def initialize(journey:)
     @balance = 0
-    @in_journey = false
     @journey = journey
   end
 
   def top_up(amount)
-    raise "You have exceeded your #{BALANCE_LIMIT} allowance." if (amount + balance) > BALANCE_LIMIT
+    fail "You have exceeded your #{BALANCE_LIMIT} allowance." if (amount + balance) > BALANCE_LIMIT
     @balance += amount
   end
 
+  def touch_in(station)
+    validate_entry
+    self.entry_station = station
+    record_journey
+  end
+
+  def touch_out(station)
+    record_journey
+    current_journey.exit_station = station
+    complete_journey
+  end
+
+  def journeys
+    @journeys ||= []
+  end
+
+  private
+
+  attr_writer :entry_station
+
   def deduct(amount)
-    raise "You don't have enough." if (balance - amount) < 0
+    fail "You don't have enough." if (balance - amount) < 0
     @balance -= amount
   end
 
@@ -24,22 +43,24 @@ class OysterCard
     !entry_station.nil?
   end
 
-  def touch_in(station)
-    raise "You don't have enough." if balance < MINIMUM_CHARGE
-    self.entry_station = station
-  end
-
-  def journeys
-    @journeys ||= []
-  end
-
-  def touch_out(station)
-    journeys << journey.new({entry_station: entry_station, exit_station: station })
-    deduct(journeys.last.fare)
+  def complete_journey
+    deduct(current_journey.fare)
     self.entry_station = nil
   end
 
-  private
-  attr_writer :entry_station
+  def current_journey
+    return journeys.last unless (journeys.empty? || in_journey?)
+    journey.new({entry_station: entry_station, exit_station: nil })
+  end
+
+  def record_journey
+    return current_journey if journeys.include?(current_journey)
+    (journeys << current_journey).last
+  end
+
+  def validate_entry
+    fail "Already touched in." if in_journey?
+    fail "You don't have enough." if balance < MINIMUM_CHARGE
+  end
 
 end

@@ -1,8 +1,7 @@
 require 'oyster_card'
 describe OysterCard do
   let(:station){double(:station)}
-  let(:other_station){double :other_station}
-  let(:journey){double :journey, fare: 10}
+  let(:journey){double :journey, fare: 5}
   let(:journey_class) {double :journey_class, new: journey}
   let(:subject) {described_class.new(journey: journey_class)}
 
@@ -16,7 +15,7 @@ describe OysterCard do
   end
 
   it "can't deduct if the balance goes below zero" do
-    expect{subject.deduct(1)}.to raise_error("You don't have enough.")
+    expect{subject.touch_in(station)}.to raise_error("You don't have enough.")
   end
 
   it "won't let you touch in if you don't have enough balance" do
@@ -34,45 +33,43 @@ describe OysterCard do
       expect{subject.top_up(1)}.to raise_error("You have exceeded your #{OysterCard::BALANCE_LIMIT} allowance.")
     end
 
-    it "can deduct an amout" do
-      expect{subject.deduct(5)}.to change{subject.balance}.by(-5)
-    end
-
-    it "knows if it's not in a journey" do
-      expect(subject.in_journey?).to be(false)
-    end
-
-    it "knows if it's in a journey" do
-      subject.touch_in(station)
-      expect(subject).to be_in_journey
-    end
-
     it "knows what station in touched in at" do
       subject.touch_in(station)
       expect(subject.entry_station).to eq(station)
     end
 
     it "records a journey with a No Station entry station when touching out without an entry station" do
-      expect(journey_class).to receive(:new).with({entry_station: nil, exit_station: station})
+      expect(journey).to receive(:exit_station=).with(station)
       subject.touch_out(station)
     end
 
+    it "records the journey when touching in" do
+      subject.touch_in(Station)
+      expect(subject.journeys).to include(journey)
+    end
+
+    it "creates a new journey when touching in" do
+      expect(journey_class).to receive(:new).with({entry_station: station, exit_station: nil})
+      subject.touch_in(station)
+    end
 
     context 'when touched in' do
-      before{subject.touch_in(station)}
+      before do
+        subject.touch_in(station)
+        allow(journey).to receive(:exit_station=)
+      end
 
-      it "can touch out of a journey" do
-        subject.touch_out(other_station)
-        expect(subject).not_to be_in_journey
+      it "cannot touch in again" do
+        expect{subject.touch_in(station)}.to raise_error("Already touched in.")
       end
 
       it "deducts the minimum charge from the balance when touching out" do
-        expect{subject.touch_out(other_station)}.to change{subject.balance}.by(-OysterCard::MINIMUM_CHARGE)
+        expect{subject.touch_out(station)}.to change{subject.balance}.by(-journey.fare)
       end
 
       it "records the journey on touch out" do
-        expect(journey_class).to receive(:new).with({entry_station: station, exit_station: other_station})
-        subject.touch_out(other_station)
+        expect(journey).to receive(:exit_station=).with(station)
+        subject.touch_out(station)
       end
 
     end
