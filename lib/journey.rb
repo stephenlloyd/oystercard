@@ -13,6 +13,11 @@ class Journey
     zones.inject(:-) + 1 rescue PENALTY_FARE
   end
 
+ # todo: test
+  def complete?
+    !exit_station
+  end
+
   private
 
   def zones
