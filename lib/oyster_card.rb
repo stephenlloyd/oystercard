@@ -41,5 +41,4 @@ class OysterCard
   private
   attr_writer :entry_station
 
-
 end

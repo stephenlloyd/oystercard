@@ -48,6 +48,12 @@ describe OysterCard do
       expect(subject.entry_station).to eq(station)
     end
 
+    it "records a journey with a No Station entry station when touching out without an entry station" do
+      subject.touch_out(station)
+      expect(subject.journeys.first).to eq({ entry_station: nil, exit_station: station})
+    end
+
+
     context 'when touched in' do
       before{subject.touch_in(station)}
 
