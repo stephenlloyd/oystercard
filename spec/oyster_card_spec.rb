@@ -1,7 +1,11 @@
 require 'oyster_card'
 describe OysterCard do
   let(:station){double(:station)}
-  let(:other_station){double :station}
+  let(:other_station){double :other_station}
+  let(:journey){double :journey, fare: 10}
+  let(:journey_class) {double :journey_class, new: journey}
+  let(:subject) {described_class.new(journey: journey_class)}
+
   it 'has a balance of zero' do
     expect(subject.balance).to eq(0)
   end
@@ -49,8 +53,8 @@ describe OysterCard do
     end
 
     it "records a journey with a No Station entry station when touching out without an entry station" do
+      expect(journey_class).to receive(:new).with({entry_station: nil, exit_station: station})
       subject.touch_out(station)
-      expect(subject.journeys.first).to eq({ entry_station: nil, exit_station: station})
     end
 
 
@@ -67,8 +71,8 @@ describe OysterCard do
       end
 
       it "records the journey on touch out" do
+        expect(journey_class).to receive(:new).with({entry_station: station, exit_station: other_station})
         subject.touch_out(other_station)
-        expect(subject.journeys).to eq [{entry_station: station, exit_station: other_station}]
       end
 
     end
