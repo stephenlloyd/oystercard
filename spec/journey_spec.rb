@@ -1,10 +1,7 @@
 require 'journey'
-
 describe Journey do
-
   it { is_expected.to respond_to(:entry_station)}
   it { is_expected.to respond_to(:exit_station)}
-
   it 'is created with an entry station' do
     subject = described_class.new(entry_station: :station)
     expect(subject.entry_station).to eq :station
@@ -65,6 +62,4 @@ describe Journey do
 
     end
   end
-
-
 end

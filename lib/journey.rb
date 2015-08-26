@@ -26,4 +26,5 @@ class Journey
   def zones
     [entry_station, exit_station].map(&:zone).sort{|a,b| b <=> a }
   end
+
 end

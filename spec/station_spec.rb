@@ -8,5 +8,6 @@ describe Station do
   it 'knows its zone' do
     expect(subject.zone).to eq(1)
   end
+
 end
 

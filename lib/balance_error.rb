@@ -1,3 +1,1 @@
-class BalanceError < StandardError
-
-end
+class BalanceError < StandardError ; end

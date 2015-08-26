@@ -1,12 +1,10 @@
 require 'journey_log'
-
 describe JourneyLog do
 
   let(:journey){ double :journey, entry_station: nil, complete?: false }
   let(:station){ double :station }
   let(:journey_klass){double :journey_klass, new: journey}
   subject {described_class.new(journey_klass: journey_klass)}
-
 
   describe '#start' do
     it 'starts a journey' do

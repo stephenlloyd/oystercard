@@ -44,12 +44,10 @@ describe OysterCard do
     end
 
     context 'when touched in' do
-
       it "deducts the minimum charge from the balance when touching out" do
         expect{subject.touch_out(station)}.to change{subject.balance}.by(-journey.fare)
       end
 
     end
-
   end
 end

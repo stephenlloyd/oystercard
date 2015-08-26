@@ -11,7 +11,6 @@ class JourneyLog
     journeys << journey_klass.new(entry_station: station)
   end
 
-  # TODO change name of methods, #exit returns self
   def stop(station)
     current_journey.exit(station)
   end
@@ -22,4 +21,5 @@ class JourneyLog
   def current_journey
     journeys.reject(&:complete?).first || journey_klass.new
   end
+
 end
