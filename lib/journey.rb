@@ -18,7 +18,7 @@ class Journey
   end
 
   def complete?
-    !exit_station.nil?
+    !!exit_station
   end
 
   private
