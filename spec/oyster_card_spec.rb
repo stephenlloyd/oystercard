@@ -15,11 +15,11 @@ describe OysterCard do
   end
 
   it "can't deduct if the balance goes below zero" do
-    expect{subject.touch_in(station)}.to raise_error("You don't have enough.")
+    expect{subject.touch_in(station)}.to raise_error(BalanceError, "You don't have enough.")
   end
 
   it "won't let you touch in if you don't have enough balance" do
-    expect{subject.touch_in(station)}.to raise_error("You don't have enough.")
+    expect{subject.touch_in(station)}.to raise_error(BalanceError, "You don't have enough.")
   end
 
   it "has an empty journey log" do
@@ -30,7 +30,7 @@ describe OysterCard do
     before{subject.top_up(OysterCard::BALANCE_LIMIT)}
 
     it "won't let you top up over the balance limit" do
-      expect{subject.top_up(1)}.to raise_error("You have exceeded your #{OysterCard::BALANCE_LIMIT} allowance.")
+      expect{subject.top_up(1)}.to raise_error(BalanceError, "You have exceeded your #{OysterCard::BALANCE_LIMIT} allowance.")
     end
 
     it "knows what station in touched in at" do

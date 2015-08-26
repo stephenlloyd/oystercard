@@ -1,15 +1,20 @@
 class Journey
-  attr_accessor :entry_station, :exit_station
+  attr_reader :entry_station, :exit_station
 
   PENALTY_FARE = 6
 
-  def initialize(entry_station: nil, exit_station: nil)
+  def initialize(entry_station: nil)
     @entry_station = entry_station
-    @exit_station = exit_station
+  end
+
+  def exit(station)
+    @exit_station = station
+    self
   end
 
   def fare
-    zones.inject(:-) + 1 rescue PENALTY_FARE
+    return PENALTY_FARE unless entry_station && exit_station
+    zones.inject(:-) + 1
   end
 
   def complete?
@@ -19,6 +24,6 @@ class Journey
   private
 
   def zones
-    [entry_station.zone, exit_station.zone].sort{|a,b|b <=> a}
+    [entry_station, exit_station].map(&:zone).sort{|a,b| b <=> a }
   end
 end

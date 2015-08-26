@@ -1,3 +1,4 @@
+require 'balance_error'
 class OysterCard
   attr_reader :balance, :journeys
   BALANCE_LIMIT = 90
@@ -9,28 +10,23 @@ class OysterCard
   end
 
   def top_up(amount)
-    fail "You have exceeded your #{BALANCE_LIMIT} allowance." if (amount + balance) > BALANCE_LIMIT
+    fail(BalanceError, "You have exceeded your #{BALANCE_LIMIT} allowance.") if (amount + balance) > BALANCE_LIMIT
     @balance += amount
   end
 
   def touch_in(station)
-    fail "You don't have enough." if balance < MINIMUM_CHARGE
+    fail(BalanceError, "You don't have enough.") if balance < MINIMUM_CHARGE
     journeys.start(station)
   end
 
   def touch_out(station)
-    deduct(journeys.stop(station).fare)
+    journey = journeys.stop(station)
+    deduct(journey.fare)
   end
 
   private
 
   def deduct(amount)
-    fail "You don't have enough." if (balance - amount) < 0
     @balance -= amount
   end
-
-  def in_journey?
-    journeys.all.reject(&:complete?).any?
-  end
-
 end
