@@ -22,9 +22,6 @@ describe OysterCard do
     expect{subject.touch_in(station)}.to raise_error(BalanceError, "You don't have enough.")
   end
 
-  it "has an empty journey log" do
-    expect(subject.journeys).to eq journey_log
-  end
 
   context 'it has a full balance' do
     before{subject.top_up(OysterCard::BALANCE_LIMIT)}
