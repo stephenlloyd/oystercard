@@ -1,3 +1,4 @@
+require 'forwardable'
 class JourneyLog
   extend Forwardable
 
