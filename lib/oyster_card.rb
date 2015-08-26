@@ -16,11 +16,11 @@ class OysterCard
 
   def touch_in(station)
     fail(BalanceError, "You don't have enough.") if balance < MINIMUM_CHARGE
-    journeys.start(station)
+    journeys.start_journey(station)
   end
 
   def touch_out(station)
-    journey = journeys.stop(station)
+    journey = journeys.stop_journey(station)
     deduct(journey.fare)
   end
 

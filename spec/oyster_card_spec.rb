@@ -2,7 +2,7 @@ require 'oyster_card'
 describe OysterCard do
   let(:station){double(:station)}
   let(:journey){double :journey, fare: 5, complete?: true}
-  let(:journey_log){double :journey_log, all: [journey], stop: journey}
+  let(:journey_log){double :journey_log, all: [journey], stop_journey: journey}
   let(:subject) {described_class.new(journey_log: journey_log)}
 
   it 'has a balance of zero' do
@@ -34,12 +34,12 @@ describe OysterCard do
     end
 
     it "knows what station in touched in at" do
-      expect(journey_log).to receive(:start).with(station)
+      expect(journey_log).to receive(:start_journey).with(station)
       subject.touch_in(station)
     end
 
     it "records a journey with a No Station entry station when touching out without an entry station" do
-      expect(journey_log).to receive(:stop).with(station)
+      expect(journey_log).to receive(:stop_journey).with(station)
       subject.touch_out(station)
     end
 
