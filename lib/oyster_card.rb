@@ -1,7 +1,7 @@
 require_relative './balance_error'
-require 'forwardable'
+
 class OysterCard
-  extend Forwardable
+
   attr_reader :balance
   BALANCE_LIMIT = 90
   MINIMUM_CHARGE = 1
