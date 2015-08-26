@@ -17,6 +17,11 @@ describe Journey do
     expect(journey.exit_station).to eq :station
   end
 
+
+  it "knows if a journey is not complete" do
+    expect(subject).not_to be_complete
+  end
+
   describe '#fare' do
 
     let(:station) { double :station }
@@ -52,10 +57,16 @@ describe Journey do
         expect(subject.fare).to eq 5
       end
 
+      it "knows if a journey is complete" do
+        subject.exit_station = station
+        expect(subject).to be_complete
+      end
+
       def update_zones(entry_zone, exit_zone)
         allow(station).to receive(:zone).and_return(entry_zone)
         allow(other_station).to receive(:zone).and_return(exit_zone)
       end
+
     end
   end
 

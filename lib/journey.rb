@@ -1,5 +1,4 @@
 class Journey
-
   attr_accessor :entry_station, :exit_station
 
   PENALTY_FARE = 6
@@ -13,9 +12,8 @@ class Journey
     zones.inject(:-) + 1 rescue PENALTY_FARE
   end
 
- # todo: test
   def complete?
-    !exit_station
+    !exit_station.nil?
   end
 
   private
@@ -23,6 +21,4 @@ class Journey
   def zones
     [entry_station.zone, exit_station.zone].sort{|a,b|b <=> a}
   end
-
-
 end

@@ -1,35 +1,24 @@
 require 'journey'
 class JourneyLog
+  attr_reader :journeys
 
   def initialize
     @journeys = []
-    @current_journey = false
   end
 
   def start(station)
-    all << Journey.new(entry_station: station)
-    self.current_journey = true
+    fail 'Already in a Journey.' if current_journey.entry_station
+    journeys << Journey.new(entry_station: station)
   end
 
   def stop(station)
-    if current_journey?
-      all.last.exit_station = station
-      self.current_journey = false
-    else
-      all << Journey.new(exit_station: station)
-    end
-    all.last
-  end
-
-  def all
-    @journeys
+    current_journey.exit_station = station
+    current_journey
   end
 
   private
 
-  attr_writer :current_journey
-
-  def current_journey?
-    @current_journey
+  def current_journey
+    journeys.reject(&:complete?).first || Journey.new
   end
 end
