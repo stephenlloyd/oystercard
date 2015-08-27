@@ -23,25 +23,25 @@ describe JourneyLog do
     allow(journey_klass).to receive(:new).and_return journey
     subject.start_journey(station)
     expect(journey).to receive(:exit).with(station)
-    subject.exit_journey(station)
+    subject.end_journey(station)
   end
 
   it 'creates a journey if there is no current journey' do
     expect(journey_klass).to receive(:new).and_return(journey)
     allow(journey).to receive(:exit).with(station)
-    subject.exit_journey(station)
+    subject.end_journey(station)
   end
 
   it "returns a new journey when stopping when no current journeys" do
     allow(journey_klass).to receive(:new).and_return journey
     allow(journey).to receive(:exit).with(station).and_return(journey)
-    expect(subject.exit_journey(station)).to eq journey
+    expect(subject.end_journey(station)).to eq journey
   end
 
   it "returns an open journey when stopping" do
     allow(subject).to receive(:journeys).and_return([journey])
     allow(journey).to receive(:exit).with(station).and_return(journey)
-    expect(subject.exit_journey(station)).to eq journey
+    expect(subject.end_journey(station)).to eq journey
   end
 
   it "wont let you start a new journey if there is a current journey" do

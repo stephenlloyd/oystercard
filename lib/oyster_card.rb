@@ -1,7 +1,6 @@
 require_relative './balance_error'
 
 class OysterCard
-
   attr_reader :balance
   BALANCE_LIMIT = 90
   MINIMUM_CHARGE = 1
@@ -22,7 +21,7 @@ class OysterCard
   end
 
   def touch_out(station)
-    journey = journey_log.exit_journey(station)
+    journey = journey_log.end_journey(station)
     deduct(journey.fare)
   end
 

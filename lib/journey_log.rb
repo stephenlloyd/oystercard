@@ -2,7 +2,7 @@ require 'forwardable'
 class JourneyLog
   extend Forwardable
 
-  def_delegator :current_journey, :exit, :exit_journey
+  def_delegator :current_journey, :exit, :end_journey
 
   def initialize(journey_klass: )
     @journey_klass = journey_klass
