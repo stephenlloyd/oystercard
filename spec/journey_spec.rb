@@ -13,8 +13,8 @@ describe Journey do
 
   describe '#fare' do
 
-    let(:station) { double :station }
-    let(:other_station) { double :other_station }
+    let(:station) { double :station, zone: 1 }
+    let(:other_station) { double :other_station, zone: 1 }
 
     it 'has a penalty fare by default' do
       expect(subject.fare).to eq Journey::PENALTY_FARE
